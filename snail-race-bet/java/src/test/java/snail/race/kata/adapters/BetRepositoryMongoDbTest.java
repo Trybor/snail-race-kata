@@ -58,6 +58,21 @@ public class BetRepositoryMongoDbTest {
 
     @Test
     void retrieve_only_bets_inside_the_time_range() {
-        Assertions.fail("TODO : write the test, then the implementation😉");
+        // given
+        Bet beforeRange = new Bet("before", new PodiumPronostic(1, 2, 3), 999L);
+        Bet atStart = new Bet("atStart", new PodiumPronostic(1, 2, 3), 1_000L);
+        Bet inside = new Bet("inside", new PodiumPronostic(1, 2, 3), 1_500L);
+        Bet atEnd = new Bet("atEnd", new PodiumPronostic(1, 2, 3), 2_000L);
+
+        repository.register(beforeRange);
+        repository.register(atStart);
+        repository.register(inside);
+        repository.register(atEnd);
+
+        // when
+        List<Bet> found = repository.findByDateRange(1_000L, 2_000L);
+
+        // then: from is included, to is excluded -> from <= timestamp < to
+        assertThat(found).hasSize(2).containsOnly(atStart, inside);
     }
 }
