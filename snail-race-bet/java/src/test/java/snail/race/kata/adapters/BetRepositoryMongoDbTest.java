@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import snail.race.kata.domain.Bet;
+import snail.race.kata.domain.PodiumPronostic;
+import java.util.List;
 
 import static com.mongodb.MongoClientSettings.getDefaultCodecRegistry;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +47,13 @@ public class BetRepositoryMongoDbTest {
         // How can we verify the bet is actually inserted ?
         // "Rien n'est plus dangereux qu'une idée quand on en a qu'une" (Emile Chartier)
         // TIPS : Find some (>=3) options before commiting to one
-        Assertions.fail("TODO : write the test, then the implementation😉");
+        // Assertions.fail("TODO : write the test, then the implementation😉");
+        Bet bet = new Bet("Alice", new PodiumPronostic(1, 2, 3), 42);
+        repository.register(bet);
+
+        // find the bet
+        List<Bet> found = repository.findByDateRange(0, 100);
+        assertThat(found).contains(bet);
     }
 
     @Test
